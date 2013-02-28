@@ -1,7 +1,8 @@
-persistence.store.websql.config(persistence, 'lentlist',
-                                'Lent list', 5 * 1024 * 1024);
+persistence.store.websql.config(persistence, 'lentlist', 'lentlist', 5 * 1024 * 1024);
 
-var Item = persistence.define('Item', {name: "TEXT", borrower: "TEXT"});
+var Item = persistence.define('Item', {title: "TEXT", borrower: "TEXT", returned: "BOOL"});
+
+persistence.schemaSync();
 
 function ListCtrl($scope) {
   //$scope.items = [
@@ -19,7 +20,6 @@ function ListCtrl($scope) {
   $scope.addItem = function() {
     var item = new Item({title:$scope.itemTitle, borrower:$scope.itemBorrower, returned: false});
     persistence.add(item);
-    //$scope.items.push({title:$scope.itemTitle, borrower:$scope.itemBorrower, returned:false});
     $scope.itemTitle = '';
     $scope.itemBorrower = '';
     $scope.items.push(item);
