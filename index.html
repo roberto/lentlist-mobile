@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Hello World</title>
+  <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js"></script>
+  <script src="app.js"></script>
+  <style>
+    .returned-true {
+      text-decoration: line-through;
+      color: grey;
+    }
+  </style>   
+</head>
+<body>
+  <h1>Lentlist</h1>
+  <script src="local:///chrome/webworks.js" type="text/javascript"></script>
+  <div>
+    <div ng-controller="ListCtrl">
+      <span>{{remaining()}} of {{items.length}} emprestados</span>
+      [ <a href="" ng-click="archive()">archive</a> ]
+      <ul class="unstyled">
+        <li ng-repeat="item in items">
+          <input type="checkbox" ng-model="item.returned">
+          <span class="returned-{{item.returned}}">{{item.title}} by {{item.borrower}}</span>
+        </li>
+      </ul>
+      <form ng-submit="addItem()">
+        I lent my
+        <input type="text" ng-model="itemTitle"  size="30" placeholder="item"> to
+        <input type="text" ng-model="itemBorrower"  size="30" placeholder="friend">
+        <input class="btn-primary" type="submit" value="add">
+      </form>
+    </div>
+  </div>
+</body>
+</html>
