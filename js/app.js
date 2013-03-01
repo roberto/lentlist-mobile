@@ -5,18 +5,14 @@ var Item = persistence.define('Item', {title: "TEXT", borrower: "TEXT", returned
 persistence.schemaSync();
 
 function ListCtrl($scope) {
-  //$scope.items = [
-  //  {title:'Kindle', borrower: 'Renata', returned:true},
-  //  {title:'Game', borrower: 'Juca', returned:false}];
-
   $scope.items = []
   Item.all().list(null, function(results){
     results.forEach(function(r){
-      console.log(r);
       $scope.items.push(r);
+      $scope.$apply();
     });
   });
-  console.log($scope.items);
+
   $scope.addItem = function() {
     var item = new Item({title:$scope.itemTitle, borrower:$scope.itemBorrower, returned: false});
     persistence.add(item);
@@ -35,19 +31,14 @@ function ListCtrl($scope) {
   };
 
   $scope.archive = function() {
-    var oldItems = $scope.items;
-    $scope.items = [];
-    angular.forEach(oldItems, function(item) {
-      if (!item.returned) $scope.items.push(item);
-    });
-  };
-
-  $scope.retrieveAll = function() {
-    $scope.items = [];
-    Item.all().list(null, function(results){
-      results.forEach(function(r){
-        $scope.items.push(r);
+    Item.all().filter("returned", "=", true).list(null, function(returnedItems){
+      returnedItems.forEach(function(returnedItem){
+        persistence.remove(returnedItem);
+        index = $scope.items.indexOf(returnedItem);
+        $scope.items.splice(index, 1);
       });
+      persistence.flush();
+      $scope.$apply();
     });
   };
 }
